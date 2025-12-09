@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="holocron-box" style="max-width: 900px; margin: 0 auto;">
+    <h2 style="margin-bottom: 20px; color: var(--blue-dark);">Extrato da Conta {{ conta.numero_conta }}</h2>
+
+    <table style="width:100%; border-collapse: collapse; margin-bottom: 20px;">
+        <thead>
+            <tr style="background: var(--blue-dark); color: white;">
+                <th>Data</th>
+                <th>Tipo</th>
+                <th>Origem</th>
+                <th>Destino</th>
+                <th>Valor (R$)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in transacoes %}
+            <tr style="text-align: center; border-bottom: 1px solid #ccc;">
+                <td>{{ t.data_hora|date:"d/m/Y H:i" }}</td>
+                <td>
+                    {% if t.conta_origem == conta %}
+                        Envio
+                    {% else %}
+                        Recebimento
+                    {% endif %}
+                </td>
+                <td>{{ t.conta_origem.numero_conta }}</td>
+                <td>{{ t.conta_destino.numero_conta }}</td>
+                <td>{{ t.valor }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align:center;">Nenhuma transação encontrada.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

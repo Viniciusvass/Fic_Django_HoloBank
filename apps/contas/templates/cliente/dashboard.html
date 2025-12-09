@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="holocron-box">
+    <h1>Bem-vindo, {{ usuario.nome }}!</h1>
+    <p>CPF: {{ usuario.cpf }}</p>
+    <p>Telefone: {{ usuario.telefone }}</p>
+    <p>Email: {{ usuario.email }}</p>
+</div>
+
+<div class="holocron-box" style="margin-top: 20px;">
+    <h2>Resumo das Contas</h2>
+    <p>Total de contas: {{ contas|length }}</p>
+    <p>Saldo total: R$ {{ saldo_total }}</p>
+
+    <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+        <thead>
+            <tr style="background-color: var(--blue-holocron); color: white;">
+                <th style="padding: 8px; text-align: left;">Número da Conta</th>
+                <th style="padding: 8px; text-align: left;">Tipo</th>
+                <th style="padding: 8px; text-align: left;">Saldo</th>
+                <th style="padding: 8px; text-align: left;">Status</th>
+                <th style="padding: 8px; text-align: left;">Data de Abertura</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for conta in contas %}
+            <tr style="border-bottom: 1px solid var(--gray-soft);">
+                <td style="padding: 8px;">{{ conta.numero_conta }}</td>
+                <td style="padding: 8px;">{{ conta.get_tipo_conta_display }}</td>
+                <td style="padding: 8px;">R$ {{ conta.saldo }}</td>
+                <td style="padding: 8px;">{{ conta.get_status_conta_display }}</td>
+                <td style="padding: 8px;">{{ conta.data_abertura }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="padding: 8px; text-align: center;">Nenhuma conta encontrada.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

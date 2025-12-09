@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Conta - HoloBank</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        :root {
+            --blue-light: #4ac3ff;
+            --blue-dark: #003f66;
+            --gray-soft: #e5e7eb;
+        }
+
+        body {
+            background: #ffffff;
+            color: #1a1a1a;
+        }
+
+        header {
+            background: var(--blue-dark);
+            padding: 18px 40px;
+            border-bottom: 2px solid var(--blue-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header .logo {
+            color: #ffffff;
+            font-size: 26px;
+            font-weight: bold;
+            text-decoration: none;
+            letter-spacing: 1px;
+            text-shadow: 0 0 6px rgba(74,195,255,0.6);
+        }
+
+        .container {
+            background: #ffffff;
+            border: 1px solid var(--gray-soft);
+            border-left: 5px solid var(--blue-light);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+            padding: 40px;
+            border-radius: 10px;
+            max-width: 550px;
+            margin: 60px auto;
+        }
+
+        h2 {
+            color: var(--blue-dark);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        form p {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 15px;
+            color: #333;
+        }
+
+        input {
+            padding: 14px;
+            border: 1px solid var(--gray-soft);
+            border-radius: 6px;
+            background: #f7f9fc;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: var(--blue-light);
+            box-shadow: 0 0 8px rgba(74,195,255,0.4);
+            background: #ffffff;
+        }
+
+        button {
+            padding: 14px;
+            background: var(--blue-light);
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 0 10px rgba(74,195,255,0.7);
+        }
+
+        button:hover {
+            background: #72d5ff;
+            box-shadow: 0 0 12px rgba(74,195,255,0.9);
+        }
+
+        .voltar {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .voltar a {
+            text-decoration: none;
+            color: var(--blue-dark);
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .voltar a:hover {
+            color: #001d33;
+            text-shadow: 0 0 6px rgba(0,63,102,0.3);
+        }
+
+        footer {
+            margin-top: 80px;
+            padding: 18px;
+            text-align: center;
+            background: var(--blue-dark);
+            color: white;
+            border-top: 2px solid var(--blue-light);
+            font-size: 14px;
+        }
+
+        select {
+            padding: 14px;
+            border: 1px solid var(--gray-soft);
+            border-radius: 6px;
+            background: #f7f9fc;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+            appearance: none; /* remove setinha nativa do navegador, se quiser personalizar depois */
+        }
+
+        select:focus {
+            border-color: var(--blue-light);
+            box-shadow: 0 0 8px rgba(74,195,255,0.4);
+            background: #ffffff;
+        }
+
+        select option {
+            padding: 10px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <a href="{% url 'index' %}" class="logo">HoloBank</a>
+    </header>
+
+    <div class="container">
+        <h2>Criar Conta</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <button type="submit">Cadastrar</button>
+        </form>
+
+        <div class="voltar">
+            <a href="{% url 'index' %}">Voltar para o início</a>
+        </div>
+    </div>
+
+    <footer>
+        © 2025 HoloBank - Todos os direitos reservados
+    </footer>
+
+    <script>
+        // Máscara CPF
+        const cpfInput = document.querySelector("#id_cpf");
+        cpfInput.addEventListener("input", () => {
+            let v = cpfInput.value.replace(/\D/g, "");
+            if (v.length > 3 && v.length <= 6) v = v.replace(/(\d{3})(\d+)/, "$1.$2");
+            if (v.length > 6 && v.length <= 9) v = v.replace(/(\d{3})(\d{3})(\d+)/, "$1.$2.$3");
+            if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d+)/, "$1.$2.$3-$4");
+            cpfInput.value = v.substring(0, 14);
+        });
+
+        // Máscara de Telefone
+        const telInput = document.querySelector("#id_telefone");
+        telInput.addEventListener("input", () => {
+            let v = telInput.value.replace(/\D/g, "");
+            if (v.length > 2) v = v.replace(/^(\d{2})(\d+)/, "($1) $2");
+            if (v.length > 7) v = v.replace(/(\d{5})(\d+)/, "$1-$2");
+            telInput.value = v.substring(0, 15);
+        });
+    </script>
+
+</body>
+</html>
