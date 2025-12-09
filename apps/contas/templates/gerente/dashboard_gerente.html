@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1 style="font-size: 28px; margin-bottom: 20px;">Painel do Gerente</h1>
+
+<!-- SEÇÃO: INFORMAÇÕES DO GERENTE -->
+<div class="holocron-box" style="margin-bottom: 30px;">
+    <h2 style="margin-bottom: 15px;">Minhas Informações</h2>
+
+    <p><strong>Nome:</strong> {{ gerente.nome }}</p>
+    <p><strong>CPF:</strong> {{ gerente.cpf }}</p>
+    <p><strong>E-mail:</strong> {{ gerente.email }}</p>
+    <p><strong>Telefone:</strong> {{ gerente.telefone }}</p>
+    <p><strong>Data de cadastro:</strong> {{ gerente.data_cadastro }}</p>
+</div>
+
+<!-- SEÇÃO: CLIENTES GERENCIADOS -->
+<div class="holocron-box">
+    <h2 style="margin-bottom: 15px;">Clientes Gerenciados</h2>
+
+    {% if clientes %}
+        <table style="width:100%; border-collapse: collapse;">
+            <tr style="background:#e5e7eb;">
+                <th style="padding:10px; text-align:left;">Nome</th>
+                <th style="padding:10px; text-align:left;">CPF</th>
+                <th style="padding:10px; text-align:left;">E-mail</th>
+                <th style="padding:10px; text-align:left;">Ações</th>
+            </tr>
+
+            {% for cliente in clientes %}
+            <tr style="border-bottom: 1px solid #ccc;">
+                <td style="padding:10px;">{{ cliente.nome }}</td>
+                <td style="padding:10px;">{{ cliente.cpf }}</td>
+                <td style="padding:10px;">{{ cliente.email }}</td>
+                <td style="padding:10px;">
+                    <a href="{% url 'detalhes_cliente' cliente.id_usuario %}"
+                       style="color:#003f66; text-decoration: underline;">
+                        Ver Detalhes
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>Nenhum cliente cadastrado sob sua gerência.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

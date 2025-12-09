@@ -14,8 +14,6 @@ def cadastro(request):
             usuario = form.save(commit=False)
             usuario.senha = make_password(form.cleaned_data['senha'])
             usuario.save()
-
-            # Criar conta automática com o tipo escolhido
             tipo_conta = form.cleaned_data['tipo_conta']
             numero_conta = str(random.randint(10000000, 99999999))
             Conta.objects.create(
@@ -23,13 +21,10 @@ def cadastro(request):
                 tipo_conta=tipo_conta,
                 usuario=usuario
             )
-
             return redirect('index')
     else:
         form = UsuarioForm()
-
     return render(request, 'cliente/cadastro.html', {'form': form})
-
 
 def login(request):
     if request.method == 'POST':
@@ -39,20 +34,21 @@ def login(request):
             senha = form.cleaned_data['senha']
             try:
                 usuario = Usuario.objects.get(email=email)
-                
                 if check_password(senha, usuario.senha):
                     request.session["usuario_id"] = usuario.id_usuario
-                    messages.success(request, f"Bem-vindo, {usuario.nome}!")
-                    return redirect('dashboard')
+                    request.session["isAdm"] = usuario.isAdm
+                    if usuario.isAdm:
+                        return redirect('dashboard_gerente')
+                    else:
+                        messages.success(request, f"Bem-vindo, {usuario.nome}!")
+                        return redirect('dashboard')
                 else:
                     messages.error(request, "Senha incorreta.")
             except Usuario.DoesNotExist:
                 messages.error(request, "Usuário não encontrado.")
     else:
         form = LoginForm()
-    
     return render(request, 'login.html', {'form': form})
-
 
 def logout(request):
     request.session.pop("usuario_id", None)

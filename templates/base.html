@@ -112,34 +112,39 @@
     </style>
 </head>
 <body>
-
     <header>
         <nav class="navbar">
             <div class="logo">
                 <a href="/">HoloBank</a>
             </div>
-
             <ul class="nav-links">
-                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-                <li><a href="{% url 'extrato' %}" >Extrato</a></li>
-                <li><a href="{% url 'transferir' %}">Transferências</a></li>
-                <li><a>Cartões</a></li>
-                <li><a>Crédito</a></li>
-                <li><a>Perfil</a></li>
-                <li><a href="{% url 'logout' %}" >Sair</a></li>
+                {% if request.session.isAdm %}
+                    <li><a href="{% url 'dashboard_gerente' %}">Dashboard</a></li>
+                    <li><a>Extrato</a></li>
+                    <li><a>Transferências</a></li>
+                    <li><a>Cartões</a></li>
+                    <li><a>Crédito</a></li>
+                    <li><a>Perfil</a></li>
+                    <li><a href="{% url 'logout' %}" >Sair</a></li>
+                {% else %}
+                    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                    <li><a href="{% url 'extrato' %}" >Extrato</a></li>
+                    <li><a href="{% url 'transferir' %}">Transferências</a></li>
+                    <li><a>Cartões</a></li>
+                    <li><a>Crédito</a></li>
+                    <li><a>Perfil</a></li>
+                    <li><a href="{% url 'logout' %}" >Sair</a></li>
+                {% endif %}
             </ul>
         </nav>
     </header>
-
     <main>
         {% block content %}
             Conteúdo de cada página
         {% endblock %} 
     </main>
-
     <footer>
         © 2025 HoloBank — Todos os direitos reservados.
     </footer>
-
 </body>
 </html>

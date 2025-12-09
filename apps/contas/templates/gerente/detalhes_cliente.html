@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 style="font-size: 26px; margin-bottom: 25px; color: var(--blue-dark);">
+        Detalhes do Cliente
+    </h1>
+    <div class="holocron-box" style="margin-bottom: 30px;">
+        <h2 style="font-size: 20px; margin-bottom: 10px;">Informações Pessoais</h2>
+        <p><strong>Nome:</strong> {{ cliente.nome }}</p>
+        <p><strong>CPF:</strong> {{ cliente.cpf }}</p>
+        {% if cliente.email %}
+        <p><strong>Email:</strong> {{ cliente.email }}</p>
+        {% endif %}
+        {% if cliente.telefone %}
+        <p><strong>Telefone:</strong> {{ cliente.telefone }}</p>
+        {% endif %}
+    </div>
+    <div class="holocron-box" style="margin-bottom: 30px;">
+        <h2 style="font-size: 20px; margin-bottom: 10px;">Conta Bancária</h2>
+        <p><strong>Número da Conta:</strong> {{ conta.numero_conta }}</p>
+        <p><strong>Saldo:</strong> R$ {{ conta.saldo }}</p>
+        <p>
+            <strong>Status:</strong>
+            {% if conta.status_conta == "ativa" %}
+                <span style="color: green; font-weight: bold;">Ativa</span>
+            {% else %}
+                <span style="color: red; font-weight: bold;">Bloqueada</span>
+            {% endif %}
+        </p>
+    </div>
+    <div style="display: flex; gap: 15px;">
+        {% if conta.status_conta == "ativa" %}
+        <a href="{% url 'bloquear_conta' conta.id_conta %}"
+        style="background: red; color: white; padding: 10px 18px; border-radius: 8px; text-decoration: none;">
+            Bloquear Conta
+        </a>
+        {% else %}
+        <a href="{% url 'reativar_conta' conta.id_conta %}"
+        style="background: green; color: white; padding: 10px 18px; border-radius: 8px; text-decoration: none;">
+            Reativar Conta
+        </a>
+        {% endif %}
+    </div>
+{% endblock %}
