@@ -40,4 +40,35 @@
         </tbody>
     </table>
 </div>
+
+<!-- 🌟 RESUMO DE CRÉDITO (NOVO) -->
+<div class="holocron-box" style="margin-top: 20px;">
+    <h2>Resumo de Créditos</h2>
+
+    <p><strong>Total de solicitações:</strong> {{ credito_total }}</p>
+
+    <p>
+        <strong>Status:</strong> 
+        <span style="color: green;">Aprovados: {{ credito_aprovado }}</span> •
+        <span style="color: orange;">Pendentes: {{ credito_pendente }}</span> •
+        <span style="color: red;">Rejeitados: {{ credito_rejeitado }}</span>
+    </p>
+
+    {% if credito_ultimo %}
+        <p style="margin-top: 10px;">
+            <strong>Último crédito solicitado:</strong><br>
+            Valor: R$ {{ credito_ultimo.valor_solicitado }} —
+            {% if credito_ultimo.status_credito == 'aprovado' %}
+                <span style="color: green; font-weight: bold;">Aprovado</span>
+            {% elif credito_ultimo.status_credito == 'rejeitado' %}
+                <span style="color: red; font-weight: bold;">Rejeitado</span>
+            {% else %}
+                <span style="color: orange; font-weight: bold;">Pendente</span>
+            {% endif %}
+        </p>
+    {% else %}
+        <p style="margin-top: 10px;">Nenhum crédito solicitado ainda.</p>
+    {% endif %}
+</div>
+
 {% endblock %}

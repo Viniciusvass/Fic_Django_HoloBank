@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="holocron-box" style="max-width: 500px; margin: 0 auto;">
+    <h2 style="margin-bottom: 20px; color: var(--blue-dark);">
+        Solicitar Crédito
+    </h2>
+
+    <p style="margin-bottom: 8px; font-size: 16px;">
+        <strong>Solicitante:</strong> {{ usuario.nome }}
+    </p>
+
+    <p style="margin-bottom: 20px; font-size: 16px;">
+        <strong>Gerente responsável:</strong>
+        {% if gerente %}
+            {{ gerente.nome }}
+        {% else %}
+            <span style="color: red;">Nenhum gerente atribuído</span>
+        {% endif %}
+    </p>
+
+    <form method="POST" style="display: flex; flex-direction: column; gap: 15px;">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit" 
+                style="
+                    background: var(--blue-dark);
+                    color: white;
+                    padding: 12px;
+                    font-size: 16px;
+                    border: none;
+                    border-radius: 6px;
+                    cursor: pointer;
+                    transition: 0.2s;">
+            Enviar Solicitação
+        </button>
+    </form>
+</div>
+{% endblock %}

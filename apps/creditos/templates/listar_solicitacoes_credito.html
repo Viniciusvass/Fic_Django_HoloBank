@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto;">
+    <h2 style="margin-bottom: 25px; color: var(--blue-dark);">
+        Solicitações de Crédito dos Clientes
+    </h2>
+    {% if solicitacoes %}
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+
+            {% for s in solicitacoes %}
+                <div class="holocron-box
+                    {% if s.status_credito == 'aprovado' %}
+                        status-aprovado
+                    {% elif s.status_credito == 'rejeitado' %}
+                        status-rejeitado
+                    {% else %}
+                        status-pendente
+                    {% endif %}
+                ">
+                    <p><strong>Cliente:</strong> {{ s.solicitante.nome }}</p>
+                    <p><strong>Valor solicitado:</strong> R$ {{ s.valor_solicitado }}</p>
+                    <p><strong>Taxa de juros:</strong> {{ s.taxa_juros }}%</p>
+                    <p><strong>Data:</strong> {{ s.data_solicitacao }}</p>
+                    <p>
+                        <strong>Status:</strong>
+                        {% if s.status_credito == 'aprovado' %}
+                            <span class="text-aprovado">Aprovado</span>
+                        {% elif s.status_credito == 'rejeitado' %}
+                            <span class="text-rejeitado">Rejeitado</span>
+                        {% else %}
+                            <span class="text-pendente">Pendente</span>
+                        {% endif %}
+                    </p>
+                    {% if s.data_analise %}
+                        <p><strong>Data da análise:</strong> {{ s.data_analise }}</p>
+                    {% endif %}
+                    <div style="margin-top: 15px; display: flex; gap: 10px;">
+                        {% if s.status_credito == 'pendente' %}
+                            <a href="{% url 'atualizar_status_credito' s.id_solicitacaoCredito %}?acao=aprovar"
+                               style="background: green; color: white; padding: 8px 12px; border-radius: 6px; text-decoration: none;">
+                               Aprovar
+                            </a>
+                            <a href="{% url 'atualizar_status_credito' s.id_solicitacaoCredito %}?acao=rejeitar"
+                               style="background: red; color: white; padding: 8px 12px; border-radius: 6px; text-decoration: none;">
+                               Rejeitar
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="holocron-box" style="text-align: center;">
+            <p>Nenhuma solicitação encontrada.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

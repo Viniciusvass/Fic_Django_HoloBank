@@ -19,4 +19,4 @@ class SolicitacaoCredito(models.Model):
     gerente_responsavel = models.ForeignKey(Usuario, null=True, blank=True, on_delete=models.SET_NULL, related_name="analises_credito")
 
     def __str__(self):
-        return f"Crédito #{self.id} - {self.valor_solicitado}"
+        return f"Crédito #{self.id_solicitacaoCredito} - {self.valor_solicitado}"

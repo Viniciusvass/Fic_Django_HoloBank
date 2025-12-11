@@ -2,18 +2,30 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Usuario, Conta, Extrato
 from .forms import TransferenciaForm
 from apps.transacoes.models import Transacao
+from apps.creditos.models import SolicitacaoCredito
 
-# Create your views here.
+#cliente
 def dashboard(request):
     usuario_id = request.session.get("usuario_id")
     if not usuario_id:
         return redirect('login')    
     usuario = Usuario.objects.get(id_usuario=usuario_id)
     contas = Conta.objects.filter(usuario=usuario)
+    creditos = SolicitacaoCredito.objects.filter(solicitante=usuario)
+    credito_total = creditos.count()
+    credito_aprovado = creditos.filter(status_credito="aprovado").count()
+    credito_pendente = creditos.filter(status_credito="pendente").count()
+    credito_rejeitado = creditos.filter(status_credito="rejeitado").count()
+    credito_ultimo = creditos.order_by("-data_solicitacao").first()
     saldo_total = sum(conta.saldo for conta in contas)
     context = {
         'usuario': usuario,
         'contas': contas,
+        'credito_total': credito_total,
+        'credito_aprovado': credito_aprovado,
+        'credito_pendente': credito_pendente,
+        'credito_rejeitado': credito_rejeitado,
+        'credito_ultimo': credito_ultimo,
         'saldo_total': saldo_total,
     }
     return render(request, 'cliente/dashboard.html', context)
@@ -79,7 +91,8 @@ def extrato(request):
         'transacoes': transacoes,
         'conta': conta
     })
-
+    
+#gerente
 def dashboard_gerente(request):
     if not request.session.get("isAdm"):
         return redirect('login')

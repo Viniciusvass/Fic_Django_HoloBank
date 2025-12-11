@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="max-width: 800px; margin: 0 auto;">
+    <h2 style="margin-bottom: 25px; color: var(--blue-dark);">
+        Minhas Solicitações de Crédito
+    </h2>
+    {% if solicitacoes %}
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            {% for s in solicitacoes %}
+                <div class="holocron-box 
+                    {% if s.status_credito == 'aprovado' %}
+                        status-aprovado
+                    {% elif s.status_credito == 'rejeitado' %}
+                        status-rejeitado
+                    {% else %}
+                        status-pendente
+                    {% endif %}
+                ">
+                    <p><strong>Valor solicitado:</strong> R$ {{ s.valor_solicitado }}</p>
+                    <p><strong>Taxa de juros:</strong> {{ s.taxa_juros }}%</p>
+                    <p><strong>Data da solicitação:</strong> {{ s.data_solicitacao }}</p>
+                    <p>
+                        <strong>Status:</strong>
+                        {% if s.status_credito == 'aprovado' %}
+                            <span class="text-aprovado">Aprovado</span>
+                        {% elif s.status_credito == 'rejeitado' %}
+                            <span class="text-rejeitado">Rejeitado</span>
+                        {% else %}
+                            <span class="text-pendente">Pendente</span>
+                        {% endif %}
+                    </p>
+                    <p>
+                        <strong>Gerente responsável:</strong>
+                        {% if s.gerente_responsavel %}
+                            {{ s.gerente_responsavel.nome }}
+                        {% else %}
+                            <span class="text-rejeitado">Nenhum</span>
+                        {% endif %}
+                    </p>
+                    {% if s.data_analise %}
+                        <p><strong>Data da análise:</strong> {{ s.data_analise }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="holocron-box" style="text-align: center;">
+            <p>Nenhuma solicitação encontrada.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
