@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 style="margin-bottom: 25px;">
+    Solicitações de Cartão
+</h2>
+
+{% if solicitacoes %}
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+        {% for s in solicitacoes %}
+            <div class="holocron-box status-{{ s.status }}">
+                
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3>{{ s.cartao.nome }}</h3>
+
+                    <span class="text-{{ s.status }}">
+                        {{ s.get_status_display }}
+                    </span>
+                </div>
+
+                <p style="margin-top: 10px;">
+                    <strong>Cliente:</strong> {{ s.solicitante.nome }}
+                </p>
+
+                <p>
+                    <strong>Conta:</strong> {{ s.conta.numero_conta }}
+                </p>
+
+                <p>
+                    <strong>Data da solicitação:</strong>
+                    {{ s.data_solicitacao|date:"d/m/Y H:i" }}
+                </p>
+
+                {% if s.status == "pendente" %}
+                    <div style="margin-top: 15px; display: flex; gap: 10px;">
+                        <a href="{% url 'aprovar_cartao' s.id %}"
+                           style="
+                               padding: 8px 14px;
+                               background: green;
+                               color: white;
+                               text-decoration: none;
+                               border-radius: 6px;
+                               font-weight: 600;
+                           ">
+                            Aprovar
+                        </a>
+
+                        <a href="{% url 'rejeitar_cartao' s.id %}"
+                           style="
+                               padding: 8px 14px;
+                               background: red;
+                               color: white;
+                               text-decoration: none;
+                               border-radius: 6px;
+                               font-weight: 600;
+                           ">
+                            Rejeitar
+                        </a>
+                    </div>
+                {% else %}
+                    <p style="margin-top: 15px; font-style: italic;">
+                        Solicitação já analisada.
+                    </p>
+                {% endif %}
+
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="holocron-box">
+        <p>Nenhuma solicitação pendente no momento.</p>
+    </div>
+{% endif %}
+
+{% endblock %}

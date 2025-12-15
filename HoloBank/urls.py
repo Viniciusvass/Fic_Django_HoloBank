@@ -8,5 +8,5 @@ urlpatterns = [
     path('usuarios/', include('apps.usuarios.urls')),
     path('contas/', include('apps.contas.urls')),
     path('creditos/', include('apps.creditos.urls')),
-    
+    path('cartoes/', include('apps.cartoes.urls')),
 ]

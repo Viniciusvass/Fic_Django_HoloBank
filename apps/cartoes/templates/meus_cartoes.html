@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="holocron-box" style="max-width: 1100px; margin: 0 auto;">
+
+    <h2 style="margin-bottom: 25px; color: var(--blue-dark);">
+        Meus Cartões
+    </h2>
+
+    {% if cartoes %}
+    <div class="cartoes-container">
+
+        {% for c in cartoes %}
+        <div class="cartao 
+            {% if c.solicitacao.cartao.tipo == 'debito' %}debito{% else %}
+                {{ c.solicitacao.cartao.cor|default:'blue' }}
+            {% endif %}
+        ">
+
+            <span class="tipo">
+                {{ c.solicitacao.cartao.get_tipo_display }}
+            </span>
+
+            <h3 style="margin-bottom: 8px;">
+                {{ c.solicitacao.cartao.nome }}
+            </h3>
+
+            <p style="letter-spacing: 2px; font-size: 18px; margin: 12px 0;">
+                **** **** **** {{ c.numero|slice:"-4:" }}
+            </p>
+
+            <p style="font-size: 14px;">
+                <strong>Validade:</strong>
+                {{ c.validade|date:"m/Y" }}
+            </p>
+
+            {% if c.solicitacao.cartao.tipo == "credito" %}
+            <p style="font-size: 14px;">
+                <strong>Limite:</strong>
+                R$ {{ c.limite }}
+            </p>
+            {% endif %}
+
+            <p style="font-size: 13px; margin-top: 10px; opacity: 0.9;">
+                Status: <strong>Ativo</strong>
+            </p>
+
+        </div>
+        {% endfor %}
+
+    </div>
+    {% else %}
+        <p>Você ainda não possui cartões ativos.</p>
+    {% endif %}
+
+</div>
+{% endblock %}

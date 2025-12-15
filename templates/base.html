@@ -1,221 +1,49 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HoloBank</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", Arial, Helvetica, sans-serif;
-        }
-        :root {
-            --blue-holocron: #4ac3ff;
-            --blue-dark: #003f66;
-            --blue-content: #eef7ff;
-            --gray-soft: #e5e7eb;
-        }
-        body {
-            display: flex;
-            min-height: 100vh;
-            background: var(--blue-content);
-            color: #1a1a1a;
-        }
-        .sidebar {
-            width: 250px;
-            background: var(--blue-dark);
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            padding: 30px 20px;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.25);
-        }
-        .sidebar .logo {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 40px;
-            text-shadow: 0 0 6px rgba(74,195,255,0.6);
-        }
-        .sidebar ul {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
-        .sidebar a {
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 16px;
-            padding: 8px;
-            border-radius: 6px;
-            transition: 0.2s;
-        }
-        .sidebar a:hover {
-            background: rgba(74,195,255,0.25);
-            color: var(--blue-holocron);
-            text-shadow: 0 0 8px rgba(74,195,255,0.7);
-        }
-        main {
-            flex: 1;
-            padding: 40px;
-            background: var(--blue-content);
-            padding-bottom: 100px;
-        }
-        footer {
-            background: var(--blue-dark);
-            color: #ffffff;
-            text-align: center;
-            padding: 14px;
-            font-size: 14px;
-            border-top: 2px solid var(--blue-holocron);
-            position: fixed;
-            bottom: 0;
-            left: 250px;
-            right: 0;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
-        }
-        .holocron-box {
-            background: white;
-            border: 1px solid var(--gray-soft);
-            border-left: 4px solid var(--blue-holocron);
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-        }
-        .holocron-box input,
-        .holocron-box select,
-        .holocron-box textarea {
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-            width: 100%;
-            background: white;
-            transition: 0.2s;
-        }
-        .holocron-box input:focus,
-        .holocron-box select:focus,
-        .holocron-box textarea:focus {
-            outline: none;
-            border-color: var(--blue-holocron);
-            box-shadow: 0 0 5px rgba(74,195,255,0.4);
-        }
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-        .dropbtn {
-            cursor: pointer;
-        }
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #ffffff;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px rgba(0,0,0,0.15);
-            padding: 8px 0;
-            border-radius: 8px;
-            z-index: 100;
-        }
-        .dropdown-content a {
-            color: #003f66;
-            padding: 10px 16px;
-            text-decoration: none;
-            display: block;
-            transition: background 0.2s;
-        }
-        .dropdown-content a:hover {
-            background-color: #e5e7eb;
-        }
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        .status-aprovado {
-            border-left: 5px solid green !important;
-        }
-        .status-rejeitado {
-            border-left: 5px solid red !important;
-        }
-        .status-pendente {
-            border-left: 5px solid orange !important;
-        }
-        .text-aprovado {
-            color: green;
-            font-weight: bold;
-        }
-        .text-rejeitado {
-            color: red;
-            font-weight: bold;
-        }
-        .text-pendente {
-            color: orange;
-            font-weight: bold;
-        }
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-                flex-direction: row;
-                overflow-x: auto;
-            }
-            .sidebar ul {
-                flex-direction: row;
-                gap: 10px;
-            }
-            footer {
-                left: 0;
-            }
-        }
-    </style>
-</head>
-
-<body>
-
-    <!-- SIDEBAR -->
+    <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+  </head>
+  <body>
     <aside class="sidebar">
-        <div class="logo">HoloBank</div>
-        <ul>
-            {% if request.session.isAdm %}
-                <li><a href="{% url 'dashboard_gerente' %}">Dashboard</a></li>
-                <li><a>Extrato</a></li>
-                <li><a>Transferências</a></li>
-                <li class="dropdown">
-                    <a class="dropbtn">Solicitações</a>
-                    <div class="dropdown-content">
-                        <a href="#">Solicitações de Cartão</a>
-                        <a href="{% url 'listar_solicitacoes_credito' %}">Solicitações de Crédito</a>
-                    </div>
-                </li>
-                <li><a>Perfil</a></li>
-                <li><a href="{% url 'logout' %}">Sair</a></li>
-            {% else %}
-                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
-                <li><a href="{% url 'extrato' %}">Extrato</a></li>
-                <li><a href="{% url 'transferir' %}">Transferências</a></li>
-                 <li class="dropdown">
-                    <a class="dropbtn">Solicitações</a>
-                    <div class="dropdown-content">
-                        <a href="#">Solicitar Cartão</a>
-                        <a href="{% url 'solicitar_credito' %}">Solicitar Crédito</a>
-                        <a href="{% url 'minhas_solicitacoes' %}">Minhas Solicitações</a>
-                    </div>
-                </li>
-                <li><a>Perfil</a></li>
-                <li><a href="{% url 'logout' %}">Sair</a></li>
-            {% endif %}
-        </ul>
+      <div class="logo">HoloBank</div>
+      <ul>
+        {% if request.session.isAdm %}
+        <li><a href="{% url 'dashboard_gerente' %}">Dashboard</a></li>
+        <li><a>Extrato</a></li>
+        <li><a>Transferências</a></li>
+        <li class="dropdown">
+          <a class="dropbtn">Solicitações</a>
+          <div class="dropdown-content">
+            <a href="{% url 'solicitacoes_cartao_gerente' %}"
+              >Solicitações de Cartão</a
+            >
+            <a href="{% url 'listar_solicitacoes_credito' %}"
+              >Solicitações de Crédito</a
+            >
+          </div>
+        </li>
+        <li><a href="{% url 'logout' %}">Sair</a></li>
+        {% else %}
+        <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'extrato' %}">Extrato</a></li>
+        <li><a href="{% url 'transferir' %}">Transferências</a></li>
+        <li class="dropdown">
+          <a class="dropbtn">Solicitações</a>
+          <div class="dropdown-content">
+            <a href="{% url 'listar_cartoes' %}">Solicitar Cartão</a>
+            <a href="{% url 'solicitar_credito' %}">Solicitar Crédito</a>
+            <a href="{% url 'minhas_solicitacoes' %}">Minhas Solicitações</a>
+          </div>
+        </li>
+        <li><a href="{% url 'meus_cartoes' %}">Meus Cartões</a></li>
+        <li><a href="{% url 'logout' %}">Sair</a></li>
+        {% endif %}
+      </ul>
     </aside>
-
-    <!-- CONTEÚDO PRINCIPAL -->
-    <main>
-        {% block content %}
-            Conteúdo de cada página
-        {% endblock %}
-    </main>
-
-</body>
+    <main>{% block content %} Conteúdo de cada página {% endblock %}</main>
+  </body>
 </html>
